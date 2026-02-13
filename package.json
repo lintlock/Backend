@@ -1,0 +1,42 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "eslint": "^9.39.2",
+    "eslint-import-resolver-node": "^0.3.9",
+    "eslint-plugin-import": "^2.32.0",
+    "express": "^5.1.0",
+    "globals": "^17.0.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.4",
+    "nodemon": "^3.1.10",
+    "npm": "^11.4.2"
+  },
+  "dependencies": {
+    "cloudinary": "^2.9.0",
+    "exceljs": "^4.4.0",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.12",
+    "resend": "^6.6.0",
+    "sharp": "^0.34.5",
+    "streamifier": "^0.1.1",
+    "stripe": "^20.2.0"
+  }
+}
