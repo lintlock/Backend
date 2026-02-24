@@ -123,6 +123,8 @@ async function upsertSubscription(stripeSub) {
     .select("plan_type name")
     .lean();
 
+  console.log("plan",plan);
+  
   const oldSubs = await Subscription.findOne({ ownerId: userId }).select(
     "stripeSubscriptionId",
   );
