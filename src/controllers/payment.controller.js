@@ -176,21 +176,78 @@ async function markSubscriptionCanceled(stripeSub) {
   );
 }
 
-async function recordPayment(invoice) {
-  console.log(invoice);
+// async function recordPayment(invoice) {
+//   console.log(invoice);
   
-  if (!invoice.subscription) return;
+//   if (!invoice.subscription) return;
+
+//   const subscription = await Subscription.findOne({
+//     stripeSubscriptionId: invoice.subscription,
+//   });
+
+//   if (!subscription) return;
+
+//   const planId =
+//     invoice.subscription_details?.metadata?.planId ||
+//     invoice.metadata?.planId ||
+//     subscription.planId;
+
+//   await Payment.create({
+//     userId: subscription.ownerId,
+//     subscriptionId: subscription._id,
+//     planId,
+//     stripeInvoiceId: invoice.id,
+//     stripePaymentIntentId: invoice.payment_intent,
+//     amount: invoice.amount_paid / 100,
+//     currency: invoice.currency,
+//     status: "succeeded",
+//     invoiceUrl: invoice.hosted_invoice_url,
+//     paidAt: new Date(invoice.created * 1000),
+//     endAt: subscription.currentPeriodEnd,
+//   });
+
+//   if (subscription.prevSubscriptionId) {
+//     await getStripe().subscriptions.cancel(subscription.prevSubscriptionId);
+//   }
+// }
+
+async function recordPayment(invoice) {
+  console.log("Processing invoice:", invoice.id);
+
+  const stripeSubscriptionId =
+    invoice.subscription ||
+    invoice.parent?.subscription_details?.subscription ||
+    invoice.lines?.data?.[0]?.parent?.subscription_item_details?.subscription ||
+    null;
+
+  if (!stripeSubscriptionId) {
+    console.log("No subscription ID found in invoice");
+    return;
+  }
 
   const subscription = await Subscription.findOne({
-    stripeSubscriptionId: invoice.subscription,
+    stripeSubscriptionId,
   });
 
-  if (!subscription) return;
+  if (!subscription) {
+    console.log("Subscription not found in DB");
+    return;
+  }
 
   const planId =
-    invoice.subscription_details?.metadata?.planId ||
+    invoice.parent?.subscription_details?.metadata?.planId ||
+    invoice.lines?.data?.[0]?.metadata?.planId ||
     invoice.metadata?.planId ||
     subscription.planId;
+
+  const existingPayment = await Payment.findOne({
+    stripeInvoiceId: invoice.id,
+  });
+
+  if (existingPayment) {
+    console.log("Payment already recorded");
+    return;
+  }
 
   await Payment.create({
     userId: subscription.ownerId,
@@ -200,15 +257,19 @@ async function recordPayment(invoice) {
     stripePaymentIntentId: invoice.payment_intent,
     amount: invoice.amount_paid / 100,
     currency: invoice.currency,
-    status: "succeeded",
+    status: invoice.status,
     invoiceUrl: invoice.hosted_invoice_url,
-    paidAt: new Date(invoice.created * 1000),
+    paidAt: new Date(invoice.status_transitions?.paid_at * 1000),
     endAt: subscription.currentPeriodEnd,
   });
 
   if (subscription.prevSubscriptionId) {
-    await getStripe().subscriptions.cancel(subscription.prevSubscriptionId);
+    await getStripe().subscriptions.cancel(
+      subscription.prevSubscriptionId
+    );
   }
+
+  console.log("Payment recorded successfully");
 }
 
 async function markPaymentFailed(invoice) {
