@@ -300,7 +300,7 @@ export const getPaymentHistory = asyncHandler(async (req, res) => {
   });
 });
 
-export const activateTrialSubscription = async ({
+export const activateTrialSubscription = asyncHandler(async({
   userEmail,
   userName,
   ownerId,
@@ -311,8 +311,6 @@ export const activateTrialSubscription = async ({
     email: userEmail,
     name: userName,
   });
-
-
 
   const subscription = await getStripe().subscriptions.create({
     customer: customer.id,
@@ -330,4 +328,4 @@ export const activateTrialSubscription = async ({
   
 
   return subscription;
-};
+});
