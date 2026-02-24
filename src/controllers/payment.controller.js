@@ -257,7 +257,7 @@ async function recordPayment(invoice) {
     stripePaymentIntentId: invoice.payment_intent,
     amount: invoice.amount_paid / 100,
     currency: invoice.currency,
-    status: invoice.status,
+    status: invoice.status === 'paid' ? 'succeeded' : 'pending',
     invoiceUrl: invoice.hosted_invoice_url,
     paidAt: new Date(invoice.status_transitions?.paid_at * 1000),
     endAt: subscription.currentPeriodEnd,
