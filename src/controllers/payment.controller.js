@@ -144,7 +144,7 @@ async function upsertSubscription(stripeSub) {
       currentPeriodStart: new Date(stripeSub.current_period_start * 1000),
       currentPeriodEnd: new Date(stripeSub.current_period_end * 1000),
       cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
-      prevSubscriptionId: oldSubs.stripeSubscriptionId || "",
+      prevSubscriptionId: oldSubs?.stripeSubscriptionId ?? "",
     },
     { upsert: true, new: true },
   );
