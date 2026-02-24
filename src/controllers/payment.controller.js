@@ -177,6 +177,8 @@ async function markSubscriptionCanceled(stripeSub) {
 }
 
 async function recordPayment(invoice) {
+  console.log(invoice);
+  
   if (!invoice.subscription) return;
 
   const subscription = await Subscription.findOne({
