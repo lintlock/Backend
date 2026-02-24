@@ -312,6 +312,8 @@ export const activateTrialSubscription = async ({
     name: userName,
   });
 
+
+
   const subscription = await getStripe().subscriptions.create({
     customer: customer.id,
     items: [{ price: priceId }],
@@ -323,6 +325,9 @@ export const activateTrialSubscription = async ({
       planType: "trial",
     },
   });
+
+  console.log("trial is created");
+  
 
   return subscription;
 };

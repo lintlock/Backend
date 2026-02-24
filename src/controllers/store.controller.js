@@ -46,6 +46,9 @@ export const createStore = asyncHandler(async (req, res, next) => {
       isActive: true,
     });
 
+    if (!trialPlan) {
+      return next({ message: "Trial plan not found", statusCode: 400 });
+    }
 
     await activateTrialSubscription({
       userEmail: req.user.email,
