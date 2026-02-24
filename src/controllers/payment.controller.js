@@ -112,7 +112,7 @@ async function upsertSubscription(stripeSub) {
   console.log("in create subscription web hook", stripeSub);
   
 
-  console.log(stripeSub.items.data[0]);
+  const items = stripeSub.items.data[0];
   
   const { userId, planId } = stripeSub.metadata || {};
   if (!userId || !planId) return;
@@ -140,8 +140,8 @@ async function upsertSubscription(stripeSub) {
         plan.plan_type === "trial"
           ? "trial"
           : mapStripeStatus(stripeSub.status),
-      currentPeriodStart: new Date(stripeSub.current_period_start * 1000),
-      currentPeriodEnd: new Date(stripeSub.current_period_end * 1000),
+      currentPeriodStart: new Date(items.current_period_start * 1000),
+      currentPeriodEnd: new Date(items.current_period_end * 1000),
       cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
       prevSubscriptionId: oldSubs?.stripeSubscriptionId ?? "",
     },
