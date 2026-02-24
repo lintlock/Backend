@@ -111,6 +111,9 @@ function mapStripeStatus(status) {
 async function upsertSubscription(stripeSub) {
   console.log("in create subscription web hook", stripeSub);
   
+
+  console.log(stripeSub.items.data[0]);
+  
   const { userId, planId } = stripeSub.metadata || {};
   if (!userId || !planId) return;
 
