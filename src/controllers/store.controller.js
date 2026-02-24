@@ -39,7 +39,8 @@ export const createStore = asyncHandler(async (req, res, next) => {
   );
 
   const existingSubscription = await Subscription.findOne({ ownerId });
-
+  console.log(existingSubscription);
+  
   if (!existingSubscription) {
     const trialPlan = await SubscriptionPlan.findOne({
       plan_type: "trial",
