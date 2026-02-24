@@ -300,7 +300,7 @@ export const getPaymentHistory = asyncHandler(async (req, res) => {
   });
 });
 
-export const activateTrialSubscription = asyncHandler(async({
+export const activateTrialSubscription = async({
   userEmail,
   userName,
   ownerId,
@@ -328,4 +328,4 @@ export const activateTrialSubscription = asyncHandler(async({
   
 
   return subscription;
-});
+};
