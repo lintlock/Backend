@@ -4,7 +4,7 @@ import { logEvent } from "../services/auditLogger.js";
 import Subscription from "../models/subscription.modal.js";
 
 export const createSubscriptionPlan = asyncHandler(async (req, res, next) => {
-  const { name, price, plan_type, durationMonths, trialDays, isActive } = req.body;
+  const { name, price, plan_type, durationMonths, trialDays, isActive, priceId } = req.body;
 
   if (!name || typeof name !== "string" || !name.trim()) {
     return next({ message: "`name` is required", statusCode: 400 });
@@ -20,7 +20,7 @@ export const createSubscriptionPlan = asyncHandler(async (req, res, next) => {
     name: name.trim(),
     price: Number(price),
     plan_type,
-
+    priceId,
     ...(durationMonths ? { durationMonths: Number(durationMonths) } : {}),
     ...(trialDays ? { trialDays: Number(trialDays) } : {}),
     ...(typeof isActive === 'boolean' ? { isActive } : {}),
