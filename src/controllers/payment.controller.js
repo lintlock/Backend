@@ -83,8 +83,6 @@ export const stripeWebhook = async (req, res) => {
   switch (event.type) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
-      console.log(event.type, event.data.object);
-      
       await upsertSubscription(event.data.object);
       break;
 
@@ -111,19 +109,17 @@ function mapStripeStatus(status) {
 }
 
 async function upsertSubscription(stripeSub) {
-  console.log("in create subscription web hook");
+  console.log("in create subscription web hook", stripeSub);
   
   const { userId, planId } = stripeSub.metadata || {};
   if (!userId || !planId) return;
 
-  console.log("userID, planID", userId, planId);
   
 
   const plan = await SubscriptionPlan.findById(planId)
     .select("plan_type name")
     .lean();
 
-  console.log("plan",plan);
   
   const oldSubs = await Subscription.findOne({ ownerId: userId }).select(
     "stripeSubscriptionId",
