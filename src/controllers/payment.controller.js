@@ -386,7 +386,7 @@ export const activateTrialSubscription = async({
   const subscription = await getStripe().subscriptions.create({
     customer: customer.id,
     items: [{ price: priceId }],
-    trial_period_days: 7,
+    trial_period_days: 30,
     cancel_at_period_end: true,
     metadata: {
       userId: ownerId.toString(),
