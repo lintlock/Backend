@@ -15,7 +15,7 @@ import { startEventWorker } from './workers/eventWorker.js';
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173', "https://lintlockfrontend.vercel.app"], 
+    origin: ['http://localhost:5173', "https://lintlockfrontend.vercel.app", "https://app.lintlock.com/"], 
     credentials:true
 }));
 
